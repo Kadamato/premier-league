@@ -6,17 +6,7 @@ import {
   requestScoreMatchesOfTheWeek,
 } from "./config";
 
-export const getMatches = async () => {
-  try {
-    const response = await fetch(requestMatches(), configRequest);
 
-    const data = await response.json();
-    return data.content;
-  } catch (error) {
-    console.error("An error occurred:", error);
-    return null;
-  }
-};
 
 export const getMatchesOfTheWeek = async (weekId: string) => {
   try {

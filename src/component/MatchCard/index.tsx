@@ -1,3 +1,6 @@
+import { clubLogos } from "@/config/clubLogos";
+import formatVietNamTime from "@/helper/formatVietNamTime";
+
 interface AltIds {
   opta: string;
 }
@@ -110,7 +113,7 @@ interface Match {
 }
 
 export default function MatchCard({ match }: { match: Match }) {
-  const { teams, clock } = match;
+  const { teams, ground } = match;
 
   const firstTeam = teams[0];
   const secondTeam = teams[1];
@@ -119,48 +122,78 @@ export default function MatchCard({ match }: { match: Match }) {
   const score1 = firstTeam.score;
   const score2 = secondTeam.score;
 
-  const teamName1 = firstTeam.team.club.shortName;
-  const teamName2 = secondTeam.team.club.shortName;
+  const firstTeamName = firstTeam.team.club.shortName;
+  const secondTeamName = secondTeam.team.club.shortName;
 
-  const teamShortName1 = firstTeam.team.club.abbr;
-  const teamShortName2 = secondTeam.team.club.abbr;
+  const firstTeamShortName = firstTeam.team.club.abbr;
+  const secondTeamShortName = secondTeam.team.club.abbr;
+
+  const firstTeamShortNameLowerCase = String(
+    firstTeam.team.club.abbr.toLowerCase()
+  );
+  const secondTeamShortNameLowerCase = secondTeam.team.club.abbr.toLowerCase();
+
+  const time = match.kickoff.label.split(",")[1];
+  const bstTime = time.trim().split(" ")[0];
+  const timeZone = formatVietNamTime(bstTime);
+
+  const stadiumName = ground.name;
+
+  const firstClubLogo = clubLogos[firstTeamShortNameLowerCase];
+  const secondClubLogo = clubLogos[secondTeamShortNameLowerCase];
 
   return (
     <div className="group flex flex-col bg-zinc-100 lg:bg-white  rounded-xl mb-3 mx-1 sm:flex-row items-center  p-3 text-[16px] justify-between transition-all sm:rounded-lg cursor-pointer bg-white hover:bg-gradient-to-r hover:from-[#e95d3c] hover:to-[#e01f2d] ">
-      <div className="flex items-center">
-        <div className="flex items-center">
-          <div className="hidden lg:flex mr-3 w-[70px] overflow-hidden text-ellipsis whitespace-nowrap">
-            {teamName1}
+      <div className="flex items-center w-full md:w-2/4 justify-center">
+        {/* first team */}
+        <div className="flex items-center w-[200px] justify-end">
+          <div className="font-medium flex md:text-[16px] md:text-[14px] text-[13px] overflow-hidden text-ellipsis whitespace-nowrap ">
+            {firstTeamName}
           </div>
 
-          <div className="mr-3 lg:hidden flex ">{teamShortName1}</div>
-
-          <img src="./images/image1.svg" alt="" />
+          <img
+            src={firstClubLogo}
+            alt={firstTeamShortNameLowerCase}
+            className="w-[32px] h-[32px] object-cover ml-[6px] md:ml-3"
+          />
         </div>
         <div
-          className={`${score1 || score2 ? "hidden" : ""} px-5 text-[14px]  `}
+          className={`${
+            !score1 && !score2 ? "flex" : "hidden"
+          } px-3 md:px-5 text-[14px]  `}
         >
-          16:30
+          {timeZone}
         </div>
 
-        <div className="px-5 text-[14px] ">
+        <div
+          className={` ${
+            score1 && score2 ? "flex" : "hidden"
+          } px-5 text-[14px] bg-gradient-to-r from-[#f9b16e] to-[#f68080] mx-1 rounded-lg py-1 `}
+        >
           {score1} - {score2}
         </div>
-
-        <div className="flex items-center">
-          <img src="./images/image.svg" alt="" className="mr-3" />
-          <div className="hidden lg:flex mr-3 w-[100px] overflow-hidden text-ellipsis whitespace-nowrap">
-            {teamName2}
+        {/* second team */}
+        <div className="flex items-center w-[200px] justify-start">
+          <img
+            src={secondClubLogo}
+            alt={secondTeamShortNameLowerCase}
+            className="w-[32px] h-[32px] mr-[6px] md:mr-3 object-cover"
+          />
+          <div className="font-medium flex md:text-[16px] md:text-[14px] text-[13px] overflow-hidden text-ellipsis whitespace-nowrap">
+            {secondTeamName}
           </div>
-          <div className="mr-3 lg:hidden flex ">{teamShortName2}</div>
         </div>
       </div>
 
-      <div className="text-[15px] mt-2 sm:mt-0">
-        American Express Stadium, Falmer
+      <div className="text-[14px] md:text-[15px] mt-2 sm:mt-0 text-left lg:w-1/4">
+        {stadiumName}
       </div>
-      <div className="group-hover:translate-x-[10px] transition-all mr-5">
-        <img src="./icons/arrow-right.svg" alt="" />
+      <div className="group-hover:translate-x-[10px] transition-all mr-5 ">
+        <img
+          src="./icons/arrow-right.svg"
+          alt=""
+          className="md:w-[26px] md:h-[26px] w-[20px] h-[20px]"
+        />
       </div>
     </div>
   );

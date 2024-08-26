@@ -1,0 +1,25 @@
+.line {
+     height: 2px;
+     border-radius: 5px;
+     background-color: #ff416c;
+     animation: slide 1.3s infinite ease-in-out;
+     max-width: 90px;
+}
+
+@keyframes slide {
+     0% {
+          width: 0;
+          background-color: #FABC3F;
+     }
+
+     50% {
+          width: 90px;
+          background-color: #3DC2EC;
+     }
+
+     100% {
+          width: 0;
+          background-color: #C40C0C;
+
+     }
+}

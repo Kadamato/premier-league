@@ -29,8 +29,11 @@ export const configRequest = {
 };
 
 //  matches not played yet
-export const requestMatches = () =>
-  "https://footballapi.pulselive.com/football/fixtures?comps=1&teams=1,2,127,130,131,4,6,7,34,8,26,10,11,12,23,15,20,21,25,38&compSeasons=719&page=0&pageSize=20&sort=asc&statuses=U,L&altIds=true&fast=false";
+export const requestMatches = (page: number , size:number) =>
+  `https://footballapi.pulselive.com/football/fixtures?comps=1&teams=1,2,127,130,131,4,6,7,34,8,26,10,11,12,23,15,20,21,25,38&compSeasons=719&page=${page}&pageSize=${size}&sort=asc&statuses=U,L&altIds=true&fast=false`;
+
+export const requestMatchesOfTheWeek = (gameweekId: string) =>
+  `https://footballapi.pulselive.com/football/fixtures?statuses=U,L,C,A&pageSize=10&page=0&gameweeks=${gameweekId}&altIds=true&fast=false`;
 
 // update score : get all matches in week  of the premier league and scores of the matches
 export const requestScoreMatchesOfTheWeek = (
@@ -46,5 +49,3 @@ export const requestPlayerInfo = (playerId: string) =>
 
 // https://footballapi.pulselive.com/football/fixtures?statuses=U,L,C,A&pageSize=10&startDate=2024-08-24&endDate=2024-08-25&page=0&gameweeks=18391&altIds=true&fast=false
 
-export const requestMatchesOfTheWeek = (gameweekId: string) =>
-  `https://footballapi.pulselive.com/football/fixtures?statuses=U,L,C,A&pageSize=10}&page=0&gameweeks=${gameweekId}&altIds=true&fast=false`;
