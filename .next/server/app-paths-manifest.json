@@ -1,0 +1,6 @@
+{
+  "/page": "app/page.js",
+  "/api/matches/season/route": "app/api/matches/season/route.js",
+  "/api/matches/week/[weekId]/route": "app/api/matches/week/[weekId]/route.js",
+  "/api/matches/weekv2/[weekId]/route": "app/api/matches/weekv2/[weekId]/route.js"
+}
