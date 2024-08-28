@@ -1,5 +1,6 @@
 import { clubLogos } from "@/config/clubLogos";
 import formatVietNamTime from "@/helper/formatVietNamTime";
+import formatVietNamTimeV2 from "@/helper/formatVietNamTimeV2";
 import type { Match } from "@/type";
 
 export default function MatchCard({ match }: { match: Match }) {
@@ -7,16 +8,12 @@ export default function MatchCard({ match }: { match: Match }) {
 
   const firstTeam = teams[0];
   const secondTeam = teams[1];
-  const goals = match.goals;
 
   const score1 = firstTeam.score ?? null;
   const score2 = secondTeam.score ?? null;
 
   const firstTeamName = firstTeam.team.club.shortName;
   const secondTeamName = secondTeam.team.club.shortName;
-
-  const firstTeamShortName = firstTeam.team.club.abbr;
-  const secondTeamShortName = secondTeam.team.club.abbr;
 
   const firstTeamShortNameLowerCase = String(
     firstTeam.team.club.abbr.toLowerCase()
@@ -107,8 +104,14 @@ export default function MatchCard({ match }: { match: Match }) {
         </div>
 
         {score1 == null && score2 == null ? (
-          <div className="flex items-center justify-between">
-            <div className="text-[14px] mr-3">{timeZone}</div>
+          <div className="flex items-center justify-between w-1/3">
+            <div className="flex flex-col items-center text-[13px] mr-3">
+              {timeZone}
+              <div className="text-[13px] text-left ">
+                {formatVietNamTimeV2(match.kickoff.label)}
+              </div>
+            </div>
+
             <div className="group-hover:translate-x-[10px] transition-all pr-2 md:hidden flex">
               <img
                 src="./icons/arrow-right.svg"
@@ -118,10 +121,14 @@ export default function MatchCard({ match }: { match: Match }) {
             </div>
           </div>
         ) : (
-          <div className="flex items-center justify-between">
-            <div className="text-[14px] pr-3 font-semibold mr-3">
+          <div className="flex items-center justify-between w-1/3">
+            <div className="text-[14px] pr-3 font-semibold ">
               <div>{score1}</div>
               <div className="mt-3">{score2}</div>
+            </div>
+
+            <div className="text-[13px] text-left mr-2">
+              {formatVietNamTimeV2(match.kickoff.label)}
             </div>
 
             <div className="group-hover:translate-x-[10px] transition-all pr-2 md:hidden flex">
@@ -135,8 +142,8 @@ export default function MatchCard({ match }: { match: Match }) {
         )}
       </div>
 
-      <div className="text-[14px] md:text-[15px] mt-2 sm:mt-0 text-left lg:w-1/4 hidden md:flex">
-        {stadiumName}
+      <div className="text-[14px]  mt-2 sm:mt-0 text-left hidden md:flex">
+        {formatVietNamTimeV2(match.kickoff.label)}
       </div>
       <div className="group-hover:translate-x-[10px] transition-all mr-5 hidden md:flex">
         <img

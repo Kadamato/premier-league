@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-
 import useSWR from "swr";
+import useSWRInfinite from "swr/infinite";
+import { useInView } from "react-intersection-observer";
 
 import MatchCard from "@/component/MatchCard";
 import LineLoading from "@/component/ui/LineLoading";
@@ -10,9 +11,6 @@ import { configRequest } from "@/config/api/premierLeague/config";
 
 import type { Match } from "@/type";
 import formatVietNamTimeV2 from "@/helper/formatVietNamTimeV2";
-import formatTime from "@/helper/formatTime";
-import useSWRInfinite from "swr/infinite";
-import { useInView } from "react-intersection-observer";
 
 const fetcher = async (url: string) => {
   try {
@@ -22,9 +20,7 @@ const fetcher = async (url: string) => {
       throw new Error("Cannot found any matches");
     }
     const data = await resp.json();
-    const matches = data.matches;
-
-    return matches;
+    return data.matches;
   } catch (error) {
     console.error(error);
   }
@@ -36,8 +32,8 @@ const getKey = (pageIndex: number, prevData: []) => {
 };
 
 export default function MatchesPage() {
-  const [timeLabel, setTimeLabel] = useState<any[]>([]);
-  const [gameWeek, setGameWeek] = useState<number[]>([]);
+  const [timeLabel, setTimeLabel] = useState<string[]>([]);
+  const [gameWeeks, setGameWeeks] = useState<number[]>([]);
 
   const { ref, inView } = useInView();
 
@@ -53,31 +49,27 @@ export default function MatchesPage() {
 
   useEffect(() => {
     if (!matches) return;
-    let times = [] as string[];
-    let weeks = [] as number[];
+    const times: string[] = [];
+    const weeks: number[] = [];
 
     for (const page of matches) {
       for (const match of page) {
-        const time = match.kickoff.label;
+        const time = formatVietNamTimeV2(match.kickoff.label);
         const week = match.gameweek.gameweek;
 
-        if (times.find((t) => t.includes(formatVietNamTimeV2(time)))) continue;
-        times.push(formatVietNamTimeV2(time));
-        // if (weeks.includes(week)) {
-        //   weeks.push(week);
-        // }
+        if (!times.includes(time)) times.push(time);
+        if (!weeks.includes(week)) weeks.push(week);
       }
     }
 
-    console.log(times);
-
     setTimeLabel(times);
-    setGameWeek(weeks);
+    setGameWeeks(weeks);
   }, [matches]);
 
   useEffect(() => {
-    if (!inView) return;
-    setSize(size + 1);
+    if (inView) {
+      setSize(size + 1);
+    }
   }, [inView]);
 
   if (isLoading)
@@ -89,21 +81,10 @@ export default function MatchesPage() {
 
   if (error) return <div>{error}</div>;
 
-  console.log(matches);
-
   return (
     <div className="sm:px-5 mb-5">
-      {/* {gameWeek !== 0 && (
-        <div className="text-[20px] lg:text-[20px] font-medium px-2 lg:px-4  py-2 text-transparent gradient-text ">
-          Matchweek {gameWeek}
-        </div>
-      )} */}
-
-      {timeLabel.map((time, index) => (
+      {/* {timeLabel.map((time, index) => (
         <div key={index}>
-          {/* <div className="text-[20px] lg:text-[20px] font-medium px-2 lg:px-4  py-2 text-transparent gradient-text ">
-            Matchweek {gameWeek[index]}
-          </div> */}
           <div className="my-2 px-2 sm:px-4 text-[16px] font-medium">
             {time}
           </div>
@@ -119,7 +100,24 @@ export default function MatchesPage() {
               ))
           )}
         </div>
-      ))}
+      ))} */}
+
+      {gameWeeks.map((week) => {
+        return matches?.map((page: []) =>
+          page
+            .filter((match: Match) => match.gameweek.gameweek === week)
+            .map((match: Match, i: number) => (
+              <div>
+                {i === 0 && (
+                  <div className="text-[20px] lg:text-[20px] font-medium px-2 lg:px-4 py-2 text-transparent animate-gradient gradient-text">
+                    Matchweek {week}
+                  </div>
+                )}
+                <MatchCard key={match?.id} match={match} />
+              </div>
+            ))
+        );
+      })}
 
       {matches && (
         <div ref={ref} className="flex items-center justify-center mt-5">
@@ -128,4 +126,10 @@ export default function MatchesPage() {
       )}
     </div>
   );
+}
+
+{
+  /* <div className="text-[20px] lg:text-[20px] font-medium px-2 lg:px-4 py-2 text-transparent gradient-text">
+Matchweek {week}
+</div> */
 }

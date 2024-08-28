@@ -1,5 +1,4 @@
 import { format, addHours, parse } from "date-fns";
-import { vi } from "date-fns/locale";
 
 export default function formatVietNamTimeV2(time: string) {
   // time = time.split(",")[0] + " " + time.split(",")[1].split(" ")[0];
@@ -17,7 +16,7 @@ export default function formatVietNamTimeV2(time: string) {
   const vietnamDate = addHours(date1, 7);
 
   let formattedDate1 = format(vietnamDate, "'Th' e, dd/MM");
-  formattedDate1 = formattedDate1.replace("Th 1", "CN");
+  formattedDate1 = formattedDate1.replace("Th 1", "Cn");
 
   return formattedDate1;
 }
