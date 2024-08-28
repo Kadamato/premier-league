@@ -11,6 +11,8 @@ import { configRequest } from "@/config/api/premierLeague/config";
 import type { Match } from "@/type";
 import formatVietNamTimeV2 from "@/helper/formatVietNamTimeV2";
 import formatTime from "@/helper/formatTime";
+import useSWRInfinite from "swr/infinite";
+import { useInView } from "react-intersection-observer";
 
 const fetcher = async (url: string) => {
   try {
@@ -28,42 +30,55 @@ const fetcher = async (url: string) => {
   }
 };
 
+const getKey = (pageIndex: number, prevData: []) => {
+  if (prevData && !prevData.length) return null;
+  return `/api/matches/seasonv2?page=${pageIndex}`;
+};
+
 export default function MatchesPage() {
   const [timeLabel, setTimeLabel] = useState<any[]>([]);
   const [gameWeek, setGameWeek] = useState<number[]>([]);
+
+  const { ref, inView } = useInView();
 
   const {
     data: matches,
     error,
     isLoading,
     isValidating,
+    size,
+    setSize,
     mutate,
-  } = useSWR(`/api/matches/seasonv2`, fetcher, {
-    onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
-      if (retryCount >= 3) return;
-      setTimeout(() => revalidate({ retryCount: retryCount + 1 }), 3000);
-    },
-  });
+  } = useSWRInfinite(getKey, fetcher);
 
   useEffect(() => {
     if (!matches) return;
     let times = [] as string[];
     let weeks = [] as number[];
 
-    for (const match of matches) {
-      const time = match.kickoff.label;
-      const week = match.gameweek.gameweek;
+    for (const page of matches) {
+      for (const match of page) {
+        const time = match.kickoff.label;
+        const week = match.gameweek.gameweek;
 
-      if (times.find((t) => t.includes(time.split(",")[0]))) continue;
-      times.push(time);
-      // if (weeks.includes(week)) {
-      //   weeks.push(week);
-      // }
+        if (times.find((t) => t.includes(formatVietNamTimeV2(time)))) continue;
+        times.push(formatVietNamTimeV2(time));
+        // if (weeks.includes(week)) {
+        //   weeks.push(week);
+        // }
+      }
     }
+
+    console.log(times);
 
     setTimeLabel(times);
     setGameWeek(weeks);
   }, [matches]);
+
+  useEffect(() => {
+    if (!inView) return;
+    setSize(size + 1);
+  }, [inView]);
 
   if (isLoading)
     return (
@@ -73,6 +88,8 @@ export default function MatchesPage() {
     );
 
   if (error) return <div>{error}</div>;
+
+  console.log(matches);
 
   return (
     <div className="sm:px-5 mb-5">
@@ -88,21 +105,24 @@ export default function MatchesPage() {
             Matchweek {gameWeek[index]}
           </div> */}
           <div className="my-2 px-2 sm:px-4 text-[16px] font-medium">
-            {formatVietNamTimeV2(time)}
+            {time}
           </div>
-          {matches
-            .filter(
-              (match: Match) =>
-                match.kickoff.label.split(",")[0] === time.split(",")[0]
-            )
-            .map((match: Match) => (
-              <MatchCard key={match?.id} match={match} />
-            ))}
+
+          {matches?.map((page: []) =>
+            (page ?? [])
+              .filter(
+                (match: Match) =>
+                  formatVietNamTimeV2(match.kickoff.label) === time
+              )
+              .map((match: Match) => (
+                <MatchCard key={match?.id} match={match} />
+              ))
+          )}
         </div>
       ))}
 
       {matches && (
-        <div className="flex items-center justify-center mt-5">
+        <div ref={ref} className="flex items-center justify-center mt-5">
           <LineLoading />
         </div>
       )}

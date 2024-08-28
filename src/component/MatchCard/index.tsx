@@ -32,10 +32,8 @@ export default function MatchCard({ match }: { match: Match }) {
   const firstClubLogo = clubLogos[firstTeamShortNameLowerCase];
   const secondClubLogo = clubLogos[secondTeamShortNameLowerCase];
 
-  console.log(score1);
-
   return (
-    <div className="group flex flex-col bg-zinc-100 lg:bg-white  rounded-xl mb-3 mx-1 sm:flex-row  items-center  py-4 md:py-3 px-3 text-[16px] justify-between transition-all md:rounded-lg cursor-pointer bg-white hover:bg-gradient-to-r hover:from-[#e95d3c] hover:to-[#e01f2d] ">
+    <div className="group flex flex-col bg-zinc-100 lg:bg-white  rounded-xl mb-3 mx-2 sm:flex-row  items-center  py-4 md:py-3 px-3 text-[16px] justify-between transition-all md:rounded-lg cursor-pointer bg-white hover:bg-gradient-to-r hover:from-[#e95d3c] hover:to-[#e01f2d] ">
       <div className="hidden md:flex items-center w-full  md:w-2/4 justify-center">
         {/* first team */}
         <div className="flex items-center  w-[200px] justify-end">
@@ -109,9 +107,9 @@ export default function MatchCard({ match }: { match: Match }) {
         </div>
 
         {score1 == null && score2 == null ? (
-          <div className="flex items-center">
+          <div className="flex items-center justify-between">
             <div className="text-[14px] mr-3">{timeZone}</div>
-            <div className="group-hover:translate-x-[10px] transition-all mr-5 md:hidden flex">
+            <div className="group-hover:translate-x-[10px] transition-all pr-2 md:hidden flex">
               <img
                 src="./icons/arrow-right.svg"
                 alt=""
@@ -120,13 +118,13 @@ export default function MatchCard({ match }: { match: Match }) {
             </div>
           </div>
         ) : (
-          <div className="flex items-center">
-            <div className="text-[14px] pr-3 font-bold mr-3">
+          <div className="flex items-center justify-between">
+            <div className="text-[14px] pr-3 font-semibold mr-3">
               <div>{score1}</div>
               <div className="mt-3">{score2}</div>
             </div>
 
-            <div className="group-hover:translate-x-[10px] transition-all mr-5 md:hidden flex">
+            <div className="group-hover:translate-x-[10px] transition-all pr-2 md:hidden flex">
               <img
                 src="./icons/arrow-right.svg"
                 alt=""
