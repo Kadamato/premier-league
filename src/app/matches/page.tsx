@@ -70,7 +70,7 @@ export default function MatchesPage() {
     if (inView) {
       setSize(size + 1);
     }
-  }, [inView]);
+  }, [inView, setSize, size]);
 
   if (isLoading)
     return (
