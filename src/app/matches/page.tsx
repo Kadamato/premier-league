@@ -107,7 +107,7 @@ export default function MatchesPage() {
           page
             .filter((match: Match) => match.gameweek.gameweek === week)
             .map((match: Match, i: number) => (
-              <div>
+              <div key={i}>
                 {i === 0 && (
                   <div className="text-[20px] lg:text-[20px] font-medium px-2 lg:px-4 py-2 text-transparent animate-gradient gradient-text">
                     Matchweek {week}
