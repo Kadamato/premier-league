@@ -1,116 +1,6 @@
 import { clubLogos } from "@/config/clubLogos";
 import formatVietNamTime from "@/helper/formatVietNamTime";
-
-interface AltIds {
-  opta: string;
-}
-
-interface Clock {
-  secs: number;
-  label: string;
-}
-
-interface CompSeason {
-  competition: {
-    abbreviation: string;
-    altIds: AltIds;
-    description: string;
-    id: number;
-    level: string;
-    source: string;
-  };
-  id: number;
-  label: string;
-}
-
-interface CompetitionPhase {
-  gameweekRange: number[];
-  id: number;
-  type: string;
-}
-
-interface Gameweek {
-  id: number;
-  compSeason: CompSeason;
-  gameweek: number;
-  competitionPhase: CompetitionPhase;
-}
-
-interface Goal {
-  assistId?: number;
-  clock: Clock;
-  description: string;
-  personId: number;
-  phase: string;
-  type: string;
-}
-
-interface Ground {
-  name: string;
-  city: string;
-  source: string;
-  id: number;
-}
-
-interface Kickoff {
-  completeness: number;
-  millis: number;
-  label: string;
-  gmtOffset: number;
-}
-
-interface MatchOfficial {
-  birth: object;
-  id: number;
-  matchOfficialId: number;
-  name: {
-    display: string;
-    first: string;
-    last: string;
-  };
-  role: string;
-}
-
-interface Team {
-  score: number;
-  team: {
-    altIds: AltIds;
-    club: {
-      abbr: string;
-      id: number;
-      name: string;
-      shortName: string;
-    };
-    id: number;
-    name: string;
-    shortName: string;
-    teamType: string;
-  };
-}
-
-interface Match {
-  altIds: AltIds;
-  attendance: number;
-  behindClosedDoors: boolean;
-  clock: Clock;
-  extraTime: boolean;
-  fixtureType: string;
-  gameweek: Gameweek;
-  goals: Goal[];
-  ground: Ground;
-  id: number;
-  kickoff: Kickoff;
-  matchOfficials: MatchOfficial[];
-  neutralGround: boolean;
-  outcome: string;
-  penaltyShootouts: object[];
-  phase: string;
-  provisionalKickoff: Kickoff;
-  replay: boolean;
-  shootout: boolean;
-  status: string;
-  teams: Team[];
-}
+import type { Match } from "@/type";
 
 export default function MatchCard({ match }: { match: Match }) {
   const { teams, ground } = match;
@@ -119,8 +9,8 @@ export default function MatchCard({ match }: { match: Match }) {
   const secondTeam = teams[1];
   const goals = match.goals;
 
-  const score1 = firstTeam.score;
-  const score2 = secondTeam.score;
+  const score1 = firstTeam.score ?? null;
+  const score2 = secondTeam.score ?? null;
 
   const firstTeamName = firstTeam.team.club.shortName;
   const secondTeamName = secondTeam.team.club.shortName;
@@ -142,24 +32,31 @@ export default function MatchCard({ match }: { match: Match }) {
   const firstClubLogo = clubLogos[firstTeamShortNameLowerCase];
   const secondClubLogo = clubLogos[secondTeamShortNameLowerCase];
 
-  return (
-    <div className="group flex flex-col bg-zinc-100 lg:bg-white  rounded-xl mb-3 mx-1 sm:flex-row items-center  p-3 text-[16px] justify-between transition-all sm:rounded-lg cursor-pointer bg-white hover:bg-gradient-to-r hover:from-[#e95d3c] hover:to-[#e01f2d] ">
-      <div className="flex items-center w-full md:w-2/4 justify-center">
-        {/* first team */}
-        <div className="flex items-center w-[200px] justify-end">
-          <div className="font-medium flex md:text-[16px] md:text-[14px] text-[13px] overflow-hidden text-ellipsis whitespace-nowrap ">
-            {firstTeamName}
-          </div>
+  console.log(score1);
 
-          <img
-            src={firstClubLogo}
-            alt={firstTeamShortNameLowerCase}
-            className="w-[32px] h-[32px] object-cover ml-[6px] md:ml-3"
-          />
+  return (
+    <div className="group flex flex-col bg-zinc-100 lg:bg-white  rounded-xl mb-3 mx-1 sm:flex-row  items-center  py-4 md:py-3 px-3 text-[16px] justify-between transition-all md:rounded-lg cursor-pointer bg-white hover:bg-gradient-to-r hover:from-[#e95d3c] hover:to-[#e01f2d] ">
+      <div className="hidden md:flex items-center w-full  md:w-2/4 justify-center">
+        {/* first team */}
+        <div className="flex items-center  w-[200px] justify-end">
+          <div className="flex items-center ">
+            <div className="font-medium flex lg:text-[15px] md:text-[14px] text-[14px] overflow-hidden text-ellipsis whitespace-nowrap ">
+              {firstTeamName}
+            </div>
+
+            <img
+              src={firstClubLogo}
+              alt={firstTeamShortNameLowerCase}
+              className="w-[32px] h-[32px] object-cover ml-[6px] md:ml-3"
+            />
+          </div>
+          <div className={`${score1 || score2 ? "flex" : "hidden"}  md:hidden`}>
+            {score1}
+          </div>
         </div>
         <div
           className={`${
-            !score1 && !score2 ? "flex" : "hidden"
+            score1 == null && score2 == null ? "flex" : "hidden"
           } px-3 md:px-5 text-[14px]  `}
         >
           {timeZone}
@@ -167,28 +64,83 @@ export default function MatchCard({ match }: { match: Match }) {
 
         <div
           className={` ${
-            score1 && score2 ? "flex" : "hidden"
-          } px-5 text-[14px] bg-gradient-to-r from-[#f9b16e] to-[#f68080] mx-1 rounded-lg py-1 `}
+            score1 != null && score2 != null ? "md:flex  hidden" : "hidden"
+          } text-white px-2 text-[14px] bg-[#483C32] mx-1 rounded-lg py-[4px] font-bold  `}
         >
           {score1} - {score2}
         </div>
         {/* second team */}
-        <div className="flex items-center w-[200px] justify-start">
+        <div className=" flex items-center w-[200px] justify-start">
           <img
             src={secondClubLogo}
             alt={secondTeamShortNameLowerCase}
             className="w-[32px] h-[32px] mr-[6px] md:mr-3 object-cover"
           />
-          <div className="font-medium flex md:text-[16px] md:text-[14px] text-[13px] overflow-hidden text-ellipsis whitespace-nowrap">
+          <div className="font-medium flex  lg:text-[15px] md:text-[14px] text-[14px] overflow-hidden text-ellipsis whitespace-nowrap">
             {secondTeamName}
           </div>
         </div>
       </div>
 
-      <div className="text-[14px] md:text-[15px] mt-2 sm:mt-0 text-left lg:w-1/4">
+      {/* mobile  */}
+      <div className="flex w-full items-center justify-between md:hidden">
+        <div>
+          <div className=" flex items-center  justify-start w-full">
+            <img
+              src={firstClubLogo}
+              alt={firstTeamShortNameLowerCase}
+              className="w-[32px] h-[32px] mr-[6px] md:mr-3 object-cover"
+            />
+            <div className="font-medium flex  lg:text-[15px] md:text-[14px] text-[14px] overflow-hidden text-ellipsis whitespace-nowrap">
+              {firstTeamName}
+            </div>
+          </div>
+
+          <div className=" flex items-center  justify-start w-full mt-3">
+            <img
+              src={secondClubLogo}
+              alt={secondTeamShortNameLowerCase}
+              className="w-[32px] h-[32px] mr-[6px] md:mr-3 object-cover"
+            />
+            <div className="font-medium flex  lg:text-[15px] md:text-[14px] text-[14px] overflow-hidden text-ellipsis whitespace-nowrap">
+              {secondTeamName}
+            </div>
+          </div>
+        </div>
+
+        {score1 == null && score2 == null ? (
+          <div className="flex items-center">
+            <div className="text-[14px] mr-3">{timeZone}</div>
+            <div className="group-hover:translate-x-[10px] transition-all mr-5 md:hidden flex">
+              <img
+                src="./icons/arrow-right.svg"
+                alt=""
+                className="w-[16px] h-[16px]"
+              />
+            </div>
+          </div>
+        ) : (
+          <div className="flex items-center">
+            <div className="text-[14px] pr-3 font-bold mr-3">
+              <div>{score1}</div>
+              <div className="mt-3">{score2}</div>
+            </div>
+
+            <div className="group-hover:translate-x-[10px] transition-all mr-5 md:hidden flex">
+              <img
+                src="./icons/arrow-right.svg"
+                alt=""
+                className="w-[16px] h-[16px]"
+              />
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className="text-[14px] md:text-[15px] mt-2 sm:mt-0 text-left lg:w-1/4 hidden md:flex">
         {stadiumName}
       </div>
-      <div className="group-hover:translate-x-[10px] transition-all mr-5 ">
+      <div className="group-hover:translate-x-[10px] transition-all mr-5 hidden md:flex">
         <img
           src="./icons/arrow-right.svg"
           alt=""

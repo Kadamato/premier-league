@@ -16,8 +16,11 @@
   }
 }
 
-body {
-
+.gradient-text {
+  background: linear-gradient(to right, #e01f2d, #3952f5);
+  -webkit-background-clip: text;
+  background-clip: text;
+  display: inline-block;
 }
 
 @layer utilities {
@@ -25,3 +28,4 @@ body {
     text-wrap: balance;
   }
 }
+
