@@ -8,8 +8,6 @@ export async function GET(req: Request) {
   const page = searchParams.get("page") ?? 0;
   const size = searchParams.get("size") ?? 40;
 
-  console.log(page, size);
-
   try {
     const recentMatchesResp = await fetch(
       requestAllMatches(Number(page), Number(size)),

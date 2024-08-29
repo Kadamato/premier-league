@@ -10,7 +10,7 @@ export default function formatVietNamTimeV2(time: string) {
 
   const formattedDate = format(date, "yyyy-MM-dd");
 
-  const newTime = formattedDate + " " + hourTime;
+  const newTime = `${formattedDate} ${hourTime}`;
 
   const date1 = parse(newTime, "yyyy-MM-dd HH:mm", new Date());
   const vietnamDate = addHours(date1, 7);

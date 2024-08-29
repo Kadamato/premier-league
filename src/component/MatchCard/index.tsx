@@ -105,8 +105,8 @@ export default function MatchCard({ match }: { match: Match }) {
 
         {score1 == null && score2 == null ? (
           <div className="flex items-center justify-between w-1/3">
-            <div className="flex flex-col items-center text-[13px] mr-3">
-              {timeZone}
+            <div className="flex flex-col items-center text-[13px] pr-3">
+              <div>{timeZone}</div>
               <div className="text-[13px] text-left ">
                 {formatVietNamTimeV2(match.kickoff.label)}
               </div>
@@ -122,13 +122,13 @@ export default function MatchCard({ match }: { match: Match }) {
           </div>
         ) : (
           <div className="flex items-center justify-between w-1/3">
-            <div className="text-[14px] pr-3 font-semibold ">
+            <div className="text-[14px] pr-4 font-semibold ">
               <div>{score1}</div>
               <div className="mt-3">{score2}</div>
             </div>
 
-            <div className="text-[13px] text-left mr-2">
-              {formatVietNamTimeV2(match.kickoff.label)}
+            <div className="text-[13px] text-left pr-2">
+              {formatVietNamTimeV2(match.kickoff.label.trim())}
             </div>
 
             <div className="group-hover:translate-x-[10px] transition-all pr-2 md:hidden flex">

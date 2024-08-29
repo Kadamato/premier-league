@@ -17,7 +17,7 @@
 }
 
 .gradient-text {
-  background: linear-gradient(to right, #e01f2d, #3952f5);
+  background: linear-gradient(to right, #1cdce8, #bb77ed, #f34a62);
   -webkit-background-clip: text;
   background-clip: text;
   display: inline-block;
@@ -28,4 +28,3 @@
     text-wrap: balance;
   }
 }
-

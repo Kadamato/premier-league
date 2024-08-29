@@ -30,7 +30,6 @@ export default function Matches() {
   const [weekId, setWeekId] = useState<number>(0);
   const [startTime, setStartTime] = useState<string>("");
   const [endTime, setEndTime] = useState<string>("");
-  const [timeLabel, setTimeLabel] = useState<any[]>([]);
   const [gameWeek, setGameWeek] = useState<number>(0);
 
   const {
@@ -73,7 +72,6 @@ export default function Matches() {
     if (weekId === 0) return;
     (async () => {
       try {
-        let times = [] as string[];
         const resp = await fetch(`/api/matches/week/${weekId}`);
 
         const data = await resp.json();
@@ -83,13 +81,7 @@ export default function Matches() {
         const endTime = matches[matches.length - 1].kickoff.label.split(",")[0];
         const gameWeek = matches[0].gameweek.gameweek;
 
-        for (const match of matches) {
-          const time = match.kickoff.label.split(",")[0];
-          if (times.includes(String(time.trim()))) continue;
-          times.push(time);
-        }
         setGameWeek(gameWeek);
-        setTimeLabel(times);
         setStartTime(formatTime(startTime));
         setEndTime(formatTime(endTime));
       } catch (error) {
@@ -110,25 +102,15 @@ export default function Matches() {
   return (
     <div className="sm:px-5 mb-5">
       {gameWeek !== 0 && (
-        <div className="text-[20px] lg:text-[20px] font-medium px-2 lg:px-4  py-2 text-transparent gradient-text ">
+        <div className="text-[20px] lg:text-[20px] font-medium px-2 lg:px-4  py-2  gradient-text  text-transparent bg-clip-text">
           Matchweek {gameWeek}
         </div>
       )}
 
-      {timeLabel.map((time, index) => (
-        <div key={index}>
-          <div className="my-2 px-2 sm:px-4 text-[16px] font-medium">
-            {time}
-          </div>
-          {matches
-            .filter(
-              (match: Match) => match.kickoff.label.split(",")[0] === time
-            )
-            .map((match: Match) => (
-              <MatchCard key={match?.id} match={match} />
-            ))}
-        </div>
-      ))}
+      {matches?.length > 0 &&
+        matches.map((match: Match) => (
+          <MatchCard key={match?.id} match={match} />
+        ))}
     </div>
   );
 }

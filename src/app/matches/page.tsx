@@ -20,7 +20,7 @@ const fetcher = async (url: string) => {
       throw new Error("Cannot found any matches");
     }
     const data = await resp.json();
-    return data.matches;
+    return data.matches ?? [];
   } catch (error) {
     console.error(error);
   }
@@ -48,29 +48,27 @@ export default function MatchesPage() {
   } = useSWRInfinite(getKey, fetcher);
 
   useEffect(() => {
-    if (!matches) return;
-    const times: string[] = [];
+    if (!matches || matches.includes(undefined)) return;
+    // const times: string[] = [];
     const weeks: number[] = [];
 
     for (const page of matches) {
       for (const match of page) {
-        const time = formatVietNamTimeV2(match.kickoff.label);
+        // const time = formatVietNamTimeV2(match.kickoff.label);
         const week = match.gameweek.gameweek;
 
-        if (!times.includes(time)) times.push(time);
+        // if (!times.includes(time)) times.push(time);
         if (!weeks.includes(week)) weeks.push(week);
       }
     }
 
-    setTimeLabel(times);
+    // setTimeLabel(times);
     setGameWeeks(weeks);
   }, [matches]);
 
   useEffect(() => {
-    if (inView) {
-      setSize(size + 1);
-    }
-  }, [inView, setSize, size]);
+    if (inView && !isLoading && !isValidating) setSize(size + 1);
+  }, [inView, size, setSize]);
 
   if (isLoading)
     return (
@@ -81,55 +79,36 @@ export default function MatchesPage() {
 
   if (error) return <div>{error}</div>;
 
+  console.log(matches);
+
   return (
     <div className="sm:px-5 mb-5">
-      {/* {timeLabel.map((time, index) => (
-        <div key={index}>
-          <div className="my-2 px-2 sm:px-4 text-[16px] font-medium">
-            {time}
-          </div>
-
-          {matches?.map((page: []) =>
-            (page ?? [])
-              .filter(
-                (match: Match) =>
-                  formatVietNamTimeV2(match.kickoff.label) === time
-              )
-              .map((match: Match) => (
-                <MatchCard key={match?.id} match={match} />
+      {!matches?.includes(undefined) ? (
+        gameWeeks.map((week) => {
+          return matches?.map((page: []) =>
+            page
+              .filter((match: Match) => match.gameweek.gameweek === week)
+              .map((match: Match, i: number) => (
+                <div key={i}>
+                  {i === 0 && (
+                    <div className="text-[20px] lg:text-[20px] font-medium px-2 lg:px-4 py-2 text-transparent gradient-text">
+                      Matchweek {week}
+                    </div>
+                  )}
+                  <MatchCard key={match?.id} match={match} />
+                </div>
               ))
-          )}
-        </div>
-      ))} */}
+          );
+        })
+      ) : (
+        <div>Cannot found any matches</div>
+      )}
 
-      {gameWeeks.map((week) => {
-        return matches?.map((page: []) =>
-          page
-            .filter((match: Match) => match.gameweek.gameweek === week)
-            .map((match: Match, i: number) => (
-              <div key={i}>
-                {i === 0 && (
-                  <div className="text-[20px] lg:text-[20px] font-medium px-2 lg:px-4 py-2 text-transparent animate-gradient gradient-text">
-                    Matchweek {week}
-                  </div>
-                )}
-                <MatchCard key={match?.id} match={match} />
-              </div>
-            ))
-        );
-      })}
-
-      {matches && (
+      {!matches?.includes(undefined) && (
         <div ref={ref} className="flex items-center justify-center mt-5">
           <LineLoading />
         </div>
       )}
     </div>
   );
-}
-
-{
-  /* <div className="text-[20px] lg:text-[20px] font-medium px-2 lg:px-4 py-2 text-transparent gradient-text">
-Matchweek {week}
-</div> */
 }

@@ -15,7 +15,7 @@ module.exports = {
         },
       },
       animation: {
-        gradient: "gradient 3s linear infinite",
+        gradient: "gradient 5s ease-in-out infinite alternate",
       },
     },
   },
