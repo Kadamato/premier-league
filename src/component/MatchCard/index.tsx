@@ -104,7 +104,7 @@ export default function MatchCard({ match }: { match: Match }) {
         </div>
 
         {score1 == null && score2 == null ? (
-          <div className="flex items-center justify-between w-1/3">
+          <div className="flex items-center justify-between sm:w-1/3 w-[40%]">
             <div className="flex flex-col items-center text-[13px] pr-3">
               <div>{timeZone}</div>
               <div className="text-[13px] text-left ">
@@ -121,7 +121,7 @@ export default function MatchCard({ match }: { match: Match }) {
             </div>
           </div>
         ) : (
-          <div className="flex items-center justify-between w-1/3">
+          <div className="flex items-center justify-between sm:w-1/3 w-[40%]">
             <div className="text-[14px] pr-4 font-semibold ">
               <div>{score1}</div>
               <div className="mt-3">{score2}</div>
