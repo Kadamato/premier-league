@@ -25,6 +25,24 @@ export const configRequest = {
     "X-Client-IP": "127.0.0.1",
     "X-Host": "127.0.0.1",
     "X-Forwared-Host": "127.0.0.1",
+    //
+    authority: "footballapi.pulselive.com",
+    accept: "*/*",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "accept-language": "en-US,en;q=0.9",
+    "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+    "if-none-match": 'W/"05868184b81a462433594b466e28b1db57"',
+    origin: "https://www.premierleague.com",
+    referer: "https://www.premierleague.com/",
+    "sec-ch-ua":
+      '"Google Chrome";v="125", "Chromium";v="125", "Not.A/Brand";v="24"',
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": '"Linux"',
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "cross-site",
+    "user-agent":
+      "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
   },
 };
 
@@ -49,3 +67,8 @@ export const requestPlayerInfo = (playerId: string) =>
 
 export const requestAllMatches = (page: number, size: number) =>
   `https://footballapi.pulselive.com/football/fixtures?comps=1&compSeasons=719&teams=1,2,127,130,131,4,6,7,34,8,26,10,11,12,23,15,20,21,25,38&page=${page}&pageSize=${size}&sort=asc&statuses=A,C, U, L&altIds=true&fast=false`;
+
+// get Achievement
+
+export const requestAchievement = () =>
+  `https://footballapi.pulselive.com/football/standings?compSeasons=719&altIds=true&detail=2&FOOTBALL_COMPETITION=1&live=true`;

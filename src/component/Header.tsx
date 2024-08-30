@@ -4,9 +4,10 @@ import Image from "next/image";
 export default function Header() {
   return (
     <div className="font-lexend  ">
-      <div className="h-[45px] flex items-center px-2 sm:px-8 font-medium fixed bg-white  top-0 left-0  w-full">
-        <Link href="/">
-          <Image src="/images/logo.png" alt="logo" width={30} height={30} />
+      <div className="h-[45px] flex items-center px-2 sm:px-8 font-medium fixed bg-white  top-0 left-0  w-full  ">
+        <Link href="/" className="hover:border-b-2 border-[#ED2939]">
+          {/* <Image src="/images/logo.png" alt="logo" width={30} height={30} /> */}
+          Home
         </Link>
         <Link
           href="/matches"
@@ -15,10 +16,16 @@ export default function Header() {
           Matches
         </Link>
         <Link
-          href="/achievement"
+          href="/tables"
           className="mr-4 text-[15px]  hover:border-b-2 border-[#ED2939] "
         >
-          Achievement
+          Tables
+        </Link>
+        <Link
+          href="/stats"
+          className="mr-4 text-[15px]  hover:border-b-2 border-[#ED2939] "
+        >
+          Stats
         </Link>
       </div>
       <div className="h-[45px] w-full"></div>

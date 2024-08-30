@@ -1,8 +1,8 @@
 {
   "/page": "app/page.js",
-  "/matches/page": "app/matches/page.js",
-  "/api/matches/seasonv2/route": "app/api/matches/seasonv2/route.js",
   "/api/matches/season/route": "app/api/matches/season/route.js",
   "/api/matches/week/[weekId]/route": "app/api/matches/week/[weekId]/route.js",
-  "/api/matches/weekv2/[weekId]/route": "app/api/matches/weekv2/[weekId]/route.js"
+  "/api/matches/weekv2/[weekId]/route": "app/api/matches/weekv2/[weekId]/route.js",
+  "/matches/page": "app/matches/page.js",
+  "/api/matches/seasonv2/route": "app/api/matches/seasonv2/route.js"
 }
