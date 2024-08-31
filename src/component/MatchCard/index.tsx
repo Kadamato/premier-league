@@ -29,8 +29,14 @@ export default function MatchCard({ match }: { match: Match }) {
   const firstClubLogo = clubLogos[firstTeamShortNameLowerCase];
   const secondClubLogo = clubLogos[secondTeamShortNameLowerCase];
 
+  const clock = match.clock?.label ?? null;
+
+  const status = match.status; // L: playing  , U: recent play, C: end game
+
+  console.log(match);
+
   return (
-    <div className="group flex flex-col bg-zinc-100 lg:bg-white  rounded-xl mb-3 mx-2 sm:flex-row  items-center  py-4 md:py-3 px-3 text-[16px] justify-between transition-all md:rounded-lg cursor-pointer bg-white hover:bg-gradient-to-r hover:from-[#e95d3c] hover:to-[#e01f2d] ">
+    <div className=" group flex flex-col bg-zinc-100 lg:bg-white  rounded-xl mb-3 mx-2 sm:flex-row  items-center  py-4 md:py-3 px-3 text-[16px] justify-between transition-all md:rounded-lg cursor-pointer bg-white hover:bg-gradient-to-r hover:from-[#e95d3c] hover:to-[#e01f2d] ">
       <div className="hidden md:flex items-center w-full  md:w-2/4 justify-center">
         {/* first team */}
         <div className="flex items-center  w-[200px] justify-end">
@@ -51,7 +57,7 @@ export default function MatchCard({ match }: { match: Match }) {
         </div>
         <div
           className={`${
-            score1 == null && score2 == null ? "flex" : "hidden"
+            status == "U" ? "flex" : "hidden"
           } px-3 md:px-5 text-[14px]  `}
         >
           {timeZone}
@@ -59,7 +65,7 @@ export default function MatchCard({ match }: { match: Match }) {
 
         <div
           className={` ${
-            score1 != null && score2 != null ? "md:flex  hidden" : "hidden"
+            status === "C" ? "md:flex  hidden" : "hidden"
           } text-white px-2 text-[14px] bg-[#483C32] mx-1 rounded-lg py-[4px] font-bold  `}
         >
           {score1} - {score2}
@@ -103,8 +109,9 @@ export default function MatchCard({ match }: { match: Match }) {
           </div>
         </div>
 
-        {score1 == null && score2 == null ? (
+        {status == "U" ? (
           <div className="flex items-center justify-between sm:w-1/3 w-[40%]">
+            <div className="text-[#ffffff] pr-4  "></div>
             <div className="flex flex-col items-center text-[13px] pr-3">
               <div>{timeZone}</div>
               <div className="text-[13px] text-left ">
@@ -127,8 +134,16 @@ export default function MatchCard({ match }: { match: Match }) {
               <div className="mt-3">{score2}</div>
             </div>
 
-            <div className="text-[13px] text-left pr-2">
-              {formatVietNamTimeV2(match.kickoff.label.trim())}
+            <div className="text-[13px] text-left pr-2 flex flex-col items-center">
+              {status == "L" ? (
+                <div className="text-[#CE2029] font-medium">Trực tiếp </div>
+              ) : (
+                ""
+              )}
+
+              {status == "C" ? <div>KT</div> : ""}
+
+              <div>{formatVietNamTimeV2(match.kickoff.label.trim())}</div>
             </div>
 
             <div className="group-hover:translate-x-[10px] transition-all pr-2 md:hidden flex">
@@ -143,7 +158,15 @@ export default function MatchCard({ match }: { match: Match }) {
       </div>
 
       <div className="text-[14px]  mt-2 sm:mt-0 text-left hidden md:flex">
-        {formatVietNamTimeV2(match.kickoff.label)}
+        <div className="flex flex-col items-center">
+          <div className="mr-2">{status === "C" && "KT,"}</div>
+          <div>{formatVietNamTimeV2(match.kickoff.label)}</div>
+        </div>
+        {status == "L" ? (
+          <div className="text-[#7F27FF] font-medium">Trực tiếp </div>
+        ) : (
+          ""
+        )}
       </div>
       <div className="group-hover:translate-x-[10px] transition-all mr-5 hidden md:flex">
         <img
