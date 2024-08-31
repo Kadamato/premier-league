@@ -7,25 +7,25 @@ export default function Header() {
       <div className="h-[45px] flex items-center px-2 sm:px-8 font-medium fixed bg-white  top-0 left-0  w-full  ">
         <Link href="/" className="hover:border-b-2 border-[#ED2939]">
           {/* <Image src="/images/logo.png" alt="logo" width={30} height={30} /> */}
-          Home
+          Trang chủ
         </Link>
         <Link
           href="/matches"
           className="ml-4 mr-4 text-[15px] hover:border-b-2 border-[#ED2939] "
         >
-          Matches
+          Trận đấu
         </Link>
         <Link
           href="/tables"
           className="mr-4 text-[15px]  hover:border-b-2 border-[#ED2939] "
         >
-          Tables
+          Bảng xếp hạng
         </Link>
         <Link
           href="/stats"
           className="mr-4 text-[15px]  hover:border-b-2 border-[#ED2939] "
         >
-          Stats
+          Thống kê
         </Link>
       </div>
       <div className="h-[45px] w-full"></div>

@@ -103,7 +103,7 @@ export default function Matches() {
     <div className="sm:px-5 mb-5">
       {gameWeek !== 0 && (
         <div className="text-[20px] lg:text-[20px] font-medium px-2 lg:px-4  py-2  gradient-text  text-transparent bg-clip-text">
-          Matchweek {gameWeek}
+          Vòng đấu {gameWeek}
         </div>
       )}
 
