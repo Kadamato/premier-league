@@ -1117,6 +1117,30 @@ input[type="range"]::-ms-fill-lower {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
+.text-\[\#00FFFF\] {
+  --tw-text-opacity: 1;
+  color: rgb(0 255 255 / var(--tw-text-opacity));
+}
+.text-\[\#0FFFFF\] {
+  --tw-text-opacity: 1;
+  color: rgb(15 255 255 / var(--tw-text-opacity));
+}
+.text-\[\#00BFFF\] {
+  --tw-text-opacity: 1;
+  color: rgb(0 191 255 / var(--tw-text-opacity));
+}
+.text-\[\#138808\] {
+  --tw-text-opacity: 1;
+  color: rgb(19 136 8 / var(--tw-text-opacity));
+}
+.text-\[\#03C03C\] {
+  --tw-text-opacity: 1;
+  color: rgb(3 192 60 / var(--tw-text-opacity));
+}
+.text-\[\#008000\] {
+  --tw-text-opacity: 1;
+  color: rgb(0 128 0 / var(--tw-text-opacity));
+}
 .shadow-lg {
   --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);

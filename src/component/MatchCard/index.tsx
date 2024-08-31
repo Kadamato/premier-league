@@ -1,6 +1,7 @@
 import { clubLogos } from "@/config/clubLogos";
 import formatVietNamTime from "@/helper/formatVietNamTime";
 import formatVietNamTimeV2 from "@/helper/formatVietNamTimeV2";
+import formatVietNamTimeV3 from "@/helper/formatVietNamTimeV3";
 import type { Match } from "@/type";
 
 export default function MatchCard({ match }: { match: Match }) {
@@ -29,7 +30,7 @@ export default function MatchCard({ match }: { match: Match }) {
   const firstClubLogo = clubLogos[firstTeamShortNameLowerCase];
   const secondClubLogo = clubLogos[secondTeamShortNameLowerCase];
 
-  const clock = match.clock?.label ?? null;
+  const clock = formatVietNamTimeV3(match.clock?.label || "") ?? null;
 
   const status = match.status; // L: playing  , U: recent play, C: end game
 
@@ -136,7 +137,9 @@ export default function MatchCard({ match }: { match: Match }) {
 
             <div className="text-[13px] text-left pr-2 flex flex-col items-center">
               {status == "L" ? (
-                <div className="text-[#CE2029] font-medium">Trực tiếp </div>
+                <div className="text-[#008000] font-medium">
+                  Trực tiếp {clock}{" "}
+                </div>
               ) : (
                 ""
               )}
@@ -160,13 +163,13 @@ export default function MatchCard({ match }: { match: Match }) {
       <div className="text-[14px]  mt-2 sm:mt-0 text-left hidden md:flex">
         <div className="flex flex-col items-center">
           <div className="mr-2">{status === "C" && "KT,"}</div>
+          {status == "L" ? (
+            <div className="text-[#008000] font-medium">Trực tiếp {clock} </div>
+          ) : (
+            ""
+          )}
           <div>{formatVietNamTimeV2(match.kickoff.label)}</div>
         </div>
-        {status == "L" ? (
-          <div className="text-[#7F27FF] font-medium">Trực tiếp </div>
-        ) : (
-          ""
-        )}
       </div>
       <div className="group-hover:translate-x-[10px] transition-all mr-5 hidden md:flex">
         <img
